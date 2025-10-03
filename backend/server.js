@@ -3,7 +3,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // <-- 1. IMPORT CORS
+const cors = require('cors'); // We are still importing cors
 
 const authRoutes = require('./routes/authRoutes.js');
 const userRoutes = require('./routes/userRoutes.js');
@@ -24,9 +24,13 @@ const connectDB = async () => {
 
 connectDB();
 
-// MIDDLEWARE
-app.use(cors()); // <-- 2. USE CORS. This tells our server to allow requests from other origins.
+// --- UPDATED MIDDLEWARE SECTION ---
+// We now explicitly tell cors to only allow our Vercel frontend URL
+app.use(cors({
+  origin: 'https://frontend-nine-tau-53.vercel.app'
+}));
 app.use(express.json());
+// ---------------------------------
 
 // ROUTES
 app.use('/api/auth', authRoutes);
